@@ -320,3 +320,118 @@ python有6个序列的内置类型，最常见的是列表和元组
 列表比较需要引入operetor模块的eq方法
 ### 列表的函数与方法
 函数
+len()
+max(list)
+min(list)
+list(seq) 将元组转换为列表
+方法
+list.append(obj) 末尾添加新对象
+list.count(obj) 统计某个元素在列表中出现的次数
+list.extend(seq) 在列表末尾一次性追加另一个序列中的多个值
+list.index(obj) 从列表中找出某个值第一个匹配项的索引位置
+list.insert(index,obj) 将对象插入列表
+list.pop([index=-1]) 移除列表中的一个元素，默认最后一个元素，并且返回该元素的值
+list.remove(obj) 移除列表中某个值的第一个匹配项
+list.reverse() 反向列表中的元素
+list.sort(key=none,reverse=False) 对原列表进行排序
+list.clear() 清空列表
+list.copy() 复制列表
+
+## 元组
+python的元组与列表类似，不同之处在于元组的元素不能修改
+元组使用小括号，列表使用方括号
+创建空元组
+tup1=()
+元组中只包含一个元素时，需要在元素后面添加逗号，否则括号会被当做运算符使用
+### 修改元组
+元组种的元素值不允许修改，但可以对元组进行连接组合
+### 删除元组
+元组中的值不允许删除，但可以使用del语句删除整个元组
+### 元组内置函数
+len(tuple)
+max(tuple)
+min(tuple)
+tuple(iterable) 将可迭代序列转化为元组
+### 关于元组是不可变的
+所谓元组的不可变指的是元组所指向的内存中的内容不可变
+重新赋值元组，会绑定到新的对象，不是修改了原来的对象
+
+## 字典
+字典是另一种可变容器模型，且可存储任意类型对象
+字典的每个键值对用冒号分隔，每个对之间用逗号分隔
+d={key1:value1,key2:value2,key3:value3}
+键是唯一的，但值则不必
+值可以取任何数据类型，但键必须是不可变的，如字符串，数字
+### 空字典
+使用大括号创建空字典
+使用内建函数dict()创建字典
+### 访问字典里的值
+把相应的键放入到方括号中
+向字典里添加新内容的方法是增加新的键对值
+del 语句可以删除单一元素，也能清空字典
+dic.clear() 清空字典
+### 字典键的特性
+字典值可以是任何的python对象，既可以是标准的对象，也可以是用户自定义的，但键不行
+不允许同一个键出现两次；创建时如果同一个键被赋值两次，后一个值会被记住
+键必须不可变，所以可以用数字，字符串或元组充当，而用列表就不行
+### 字典内置函数方法
+函数
+len(dict) 元素个数，即键的总数
+str(dict) 输出字典，可以打印的字符串表示
+type(varialbe) 返回输入的变量类型
+内置方法
+dict.clear()
+dict.copy()
+dict.fromkeys()
+dict.get(key,default=None) 返回指定键的值；不存在则返回默认值
+key in dict
+dict.items() 以列表返回一个视图对象
+dict.keys() 返回一个视图对象
+dict.setdefault(key,default=None) 如果键不存在与字典中，将会添加键并将值设为default
+dict.update(dict2) 将字典dict2的键值对更新到dict里
+dict.values() 返回一个视图对象
+dict.pop(key[,default]) 删除字典key所对应的值，返回被删除的值
+dict.popitem() 返回并删除字典中的最后一对键和值
+
+## 集合
+set是一个无序的不重复元素序列
+集合中的元素不会重复，并且可以进行交集，并集，差集等常见的集合操作
+可以使用大括号创建集合，元素之间用逗号隔开；使用set()函数创建集合
+set1={1,2,3,4}
+set2=set([4,5,6,7])
+创建一个空集合必须使用set()而不是{}
+集合支持集合推导式
+### 集合的基本操作
+添加元素
+s.add(x)
+如果元素已存在，则不进行任何操作.
+s.update(x) 参数可以是列表 元组 字典等
+x可以有多个，用逗号隔开
+移除元素
+s.remove(x) 元素不存在会发生错误
+s.discard(x) 元素不存在不会发生错误
+随机删除集合中的一个元素
+s.pop()
+计算集合元素个数 len(s)
+清空集合 s.clear()
+判断元素是否在集合中 x in s
+### 集合内置方法完整列表
+add()
+clear()
+copy()
+different() 返回多个集合的差集
+different_update() 移除集合中的元素，该元素在指定的集合也存在
+discard() 删除集合中指定的元素
+intersection() 返回集合的交集
+intersection_update() 返回集合的交集
+isdisjoint() 判断两个集合是否包含相同的元素
+issubset() 判断指定集合是否为该方法参数集合的子集
+issuperset() 判断该方法的参数集合是否为指定集合的子集
+pop() 移除随机元素
+remove() 移除指定元素
+symmetric_different() 返回两个集合中不重复的元素集合
+symmetric_difference_update() 移除当前集合中在另外一个指定集合相同的元素，并将另外一个指定集合
+中不同的元素插入到当前集合中
+union() 返回两个集合的并集
+update() 给集合添加元素
+len() 计算集合元素个数
