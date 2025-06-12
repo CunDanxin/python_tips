@@ -435,3 +435,30 @@ symmetric_difference_update() 移除当前集合中在另外一个指定集合�
 union() 返回两个集合的并集
 update() 给集合添加元素
 len() 计算集合元素个数
+
+## python3 assert 断言
+错误和异常
+assert用于判断一个表达式 在表达式条件为false的时候触发异常
+断言可以在条件不满足程序运行的情况下直接返回错误，而不必等待程序运行后出现崩溃的情况
+
+## python推导式
+推导式是一种独特的数据处理方式，可以从一个数据序列结构构建另一个新的数据序列的结构体
+适用于生成列表 字典 集合 和生成器
+### 列表推导式
+[表达式 for 变量 in 列表]
+[表达式 for 变量 in 列表 if 条件]
+表达式可以是有返回值的函数
+### 字典推导式
+{key_expr: value_expr for value in collecting if conditon}
+### 集合推导式
+{expression for item in Sequence if conditional}
+### 元组推导式 生成器表达式
+(expression for item in Sequence if conditional)
+元组推导式返回的是一个生成器对象
+
+## python lambda
+使用lambda创建匿名函数
+lambda函数是一种观念小型的 匿名的 内联函数 可以具有任意数量的参数 但只能有一个表达式
+匿名函数不需要使用def关键字定义完整函数
+语法格式
+lambda arguments:expression
