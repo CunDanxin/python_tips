@@ -462,3 +462,5 @@ lambda函数是一种观念小型的 匿名的 内联函数 可以具有任意�
 匿名函数不需要使用def关键字定义完整函数
 语法格式
 lambda arguments:expression
+
+尝试本地更新
