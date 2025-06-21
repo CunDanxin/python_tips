@@ -464,3 +464,284 @@ lambda函数是一种观念小型的 匿名的 内联函数 可以具有任意�
 lambda arguments:expression
 
 尝试本地更新
+
+## 条件控制
+if condition1:
+    statement_block_1
+elif condition2:
+    statement_block_2
+else:
+    statement_block_3
+python中用elif代替了else if，所以if语句的关键字为 if-elif-else
+每个条件后面都要使用冒号： 表示接下来是满足条件后要执行的语句块
+使用缩进来划分语句块 相同缩进数的语句在一起组成一个语句块
+python中没有switch...case语句，但添加了match...case，功能类似
+可以吧if...elif...else结构放在另外一个if...elif...else结构中，即if嵌套
+### match...case
+match后的对象会一次与case后的内容进行匹配，如果匹配成功，则执行匹配到的表达式，否则直接跳过
+_可以匹配一切  
+语法格式如下  
+```
+match subject:  
+    case <pattern_1>:  
+        <action_1>  
+    case <pattern_2>:  
+        <action_2>  
+    case <pattern_3>:  
+        <action_3>  
+    case _:  
+        <action_wildcard>  
+```
+case _:类似于C和Java中的default，当其他case都无法匹配时，匹配这条，保证永远会匹配成功  
+```
+def http_errpr(status):
+    match status:
+        case 400:
+            return "Bad reuest"
+        case 404:
+            return "Not found"
+        case 418:
+            return "I'm a teapot"
+        case _:
+            return "Something's wrong with the internet"
+
+mystatus=400
+print(http_error(mystatus))
+```
+一个case也可以设置多个匹配条件，条件使用|隔开
+```
+...
+    case 401|402|403:
+        return "Not allowed"
+```
+## python3循环语句
+### while循环
+python中while语句的一般形式：
+```
+while 判断条件（condition）：
+    执行语句（statements）...
+```
+python中没有do...while循环
+### 无限循环
+可以通过设置条件表达式永远不为false来实现无限循环
+使用CTRL+C来退出当前的无限循环
+无限循环在服务器上客户端的实时请求非常有用
+## while循环使用else语句
+如果while后面的条件语句为false时，则执行else语句块
+```
+while <expr>:
+    <statement(s)>
+else:
+    <additional_statement(s)>
+```
+循环输出数字，并判断大小
+```
+count=0
+while count<5:
+    print(count,'小于5')
+    count=count+1
+else:
+    print(count,'大于或等于5')
+```
+### 简单语句组
+类似if语句的语法，如果while循环体中只有一条语句，可以将该语句与while写在同一行中
+```
+flag=1
+while(flag): print('欢迎访问菜鸟教程！')
+print("Good bye!")
+```
+### for语句
+python for循环可以遍历任何可迭代对象，如一个列表或者一个字符串
+```
+for <variable> in <sequence>:
+    <statements>
+else:
+    <statements>
+```
+for...else的用法与while...else类似  
+整数范围值可以配合range()函数使用，左闭右开
+```
+#1到5的所有数字
+for number in range(1.6):
+    print(number)
+```
+### for...else
+python中，for...else...用于在循环结束后执行一段代码
+```
+for item in iterable:
+    #循环主体
+else:
+    #循环结束后执行的代码
+```
+当循环执行完毕，即遍历完iterable中的所有元素后，会执行else子句中的代码，如果在循环过程中
+遇到了break语句，则会中断循环，此时不会执行else子句
+### range()函数
+可以使range()以指定数字开始并指定不同的增量（甚至可以是负数，即步长）
+```
+for i in range(0,10,3)
+    print(i)
+```
+可以结合range()和len()函数以遍历一个序列的索引  
+可以使用range()函数来创建一个列表
+### break和continue语句及循环中的else子句
+break语句可以跳出for和while循环体  
+如果从for或while循环中终止，任何对应的循环else块将不执行  
+continue语句被用来告诉python跳过当前循环块中的剩余语句，然后继续进行下一次循环  
+循环语句可以有else子句，在穷尽列表（for循环）或条件变为false（while循环）导致循环终止时被执行  
+但循环被break终止时不执行
+### pass语句
+空语句，保持程序结构的完整性  
+不做任何事情，一般用作占位语句
+## 编程第一步
+### end关键字
+关键字end可以将结果输出到同一行，或者在输出的末尾添加不同的字符
+
+## python推导式
+python推导式是一种独特的数据处理方式，可以从一个数据序列构建另一个新的数据序列的结构体  
+python推导式是一种强大且简洁的语法，适用于生成列表 字典 集合和生成器  
+在使用推导式时，需要注意可读性，尽量保持表达式简洁，以免影响代码的可读性和可维护性
+### 列表推导式
+```
+[表达式 for 变量 in 列表]
+或者
+[表达式 for 变量 in 列表 if 条件]
+```
+### 字典推导式
+```
+{key_expr:value_expr for value in collection}
+或
+{key_expr:value_expr for value in collection if condition}
+```
+### 集合推导式
+```
+{expression for item in Sequence}
+或
+{expression for item in Sequence if conditional}
+```
+### 元组推导式（生成器表达式）
+元组推导式可以利用range区间 元组 列表 字典和集合等数据类型 快速生成一个满足指定需求的元组
+```
+(expression for item Sequence)
+或
+(expression for item in Sequence if conditonal)
+```
+元组推导式和列表推导式用法完全相同  
+元组推导式用()括起来，列表推导式用的是[]
+元组推导式返回的结果是一个生成器对象
+可以使用 tuple()函数，直接将生成器对象转换成元组  
+### 根据判断条件生成不同列表的推导式
+```
+result1 if condition else result2 for variable in originlist
+list1=['python','test1','test2']
+list2=[word.title() if word.startwith('p') else word.upper() for word in list1]
+print(list2)
+```
+## python迭代器与生成器
+### 迭代器
+迭代是python最强大的功能之一 是访问集合元素的一种方式  
+迭代器是一个可以记住遍历的位置的对象  
+迭代器对象从集合的第一个元素开始访问，直到所有的元素被访问完结束  
+迭代器只能往前不会后退
+迭代器有两个基本方法 iter() next()  
+字符串 列表或元组对象都可用于创建迭代器  
+迭代器对象可以使用常规for语句进行遍历  
+也可以使用next()函数
+
+#### 创建一个迭代器  
+把一个类作为一个迭代器使用需要在类中实现两个方法 __iter__() __next__()  
+类都有一个构造函数 python的构造函数为 __init__() 它会在对象初始化的时候执行  
+__iter__() 方法返回一个特殊的迭代器对象 这个迭代器对象实现了__next__()方法并通过
+StopIteration异常标识迭代的完成  
+__next__()方法会返回下一个迭代器对象  
+```
+#创建一个返回数字的迭代器，初始值为1，逐步递增1：
+class MyNumbers:
+    def __iter__(self):
+        self.a=1
+        return self
+    
+    def __next__(self):
+        x=self.a
+        self.a+=1
+        return x   
+
+myclass=MyNumbers()
+myiter=iter(myclass)
+
+print(next(myiter))
+print(next(myiter))
+print(next(myiter))
+print(next(myiter))
+print(next(myiter))
+```
+#### StopIteration
+StopIteration异常用于标识迭代的完成 防止出现无限循环的情况  
+在__next__()方法中可以设置在完成指定循环次数后触发StopIteration异常来结束迭代  
+```
+class MyNubers:
+    def __iter__(self):
+        self.a=1
+        return self
+    
+    def __next__(self):
+        if self.a<=20:
+            x=self.a
+            self.a+=1
+            return x
+        else:
+            return StopIteartion
+
+myclass=MyNumbers()
+myiter=iter(myclass)
+
+for x in myiter:
+    print(x)
+```
+### 生成器
+在python中 使用了yield的函数被称为生成器 generator  
+yield是一个关键字 用于定义生成器函数  可以在迭代过程中逐步产生值，而不是一次性返回所有结果  
+生成器是一个返回迭代器的函数，只能用于迭代操作；即生成器就是一个迭代器  
+当在生成器函数中使用yield语句时，函数的执行将会暂停，
+并将yield后面的表达式作为当前迭代的值返回  
+每次调用生成器的next()方法或使用for循环进行迭代时，函数会从上次暂停的地方继续执行，
+直到再次遇到yield语句。这样，生成器函数可以逐步产生之，而不是一次性计算并返回所有结果  
+调用一个生成器，返回的是一个迭代器  
+```
+#生成器函数的使用
+#定义生成器函数
+def countdown(n):
+    while n>0:
+        yield n
+        n-=1
+#创建生成器对象
+generator=countdown(5)
+
+#通过迭代生成器获取值
+print(next(generator)) #输出5
+print(next(generator)) #输出4
+print(next(generator)) #输出3
+
+#使用for循环迭代生成器
+for value in generator:
+    print(value) #输出：2 1
+```
+
+```
+#使用yield实现斐波那契额数列
+import sys
+def fibonacci(n):
+    a,b,counter=0,1,0
+    while True:
+        if(counter>n):
+            return
+        yield a
+        a,b=b,a+b
+        counter+=1
+f=fibonacci(10)
+
+while True:
+    try:
+        print(next(f),end=' ')
+    except StopIteration:
+        sys.exit()
+```
