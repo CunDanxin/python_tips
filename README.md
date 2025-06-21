@@ -745,3 +745,134 @@ while True:
     except StopIteration:
         sys.exit()
 ```
+## python3 with
+处理文件操作 数据库连接等需要明确释放资源的场景  
+with是python中的一个关键字，用于上下文管理协议 context management protocol  
+简化了资源管理代码，特别是那些需要明确释放或清理的资源 如文件 网络连接 数据库连接等  
+
+with语句的优势  
+自动释放资源  
+代码简洁  
+异常安全  
+可读性强  
+
+### with语句基本语法
+```
+with expression [as variable]:
+    #代码块
+```
+其中，expression返回一个支持上下文管理协议的对象  
+as variable 是可选的，用于将表达式结果赋值给变量   
+代码块执行完毕后，自动调用清理方法  
+
+文件操作示例  
+最常见的with语句应用场景是文件操作
+```
+with open('example.txt','r') as file:
+    content=file.read()
+    print(content)
+#文件已自动关闭
+```
+### with语句的工作原理
+with语句背后是python的上下文管理协议，该协议要求对象实现两个方法  
+__enter__() 进入上下文时调用，返回值赋给as后的变量  
+__exit__() 退出上下文时调用，处理清理工作  
+### 异常处理机制
+__exit__()方法接收3个参数  
+exc_type: 异常类型  
+exc_val: 异常值  
+exc_tb: 异常追踪信息  
+如果__exit__()返回True，则表示异常已被处理，不会继续传播；
+返回False或None，异常会继续向外传播 **#向外传播是什么意思？**
+### 实际应用场景
+文件操作
+```
+#同时打开多个文件
+with open('input.txt','r') as infile, open('output.txt','r') as outfile:
+    content=infile.read()
+    outfile.write(content.upper())
+```
+数据库连接
+```
+import sqlite3
+with sqlite3.connect('database.db') as conn:
+    cursor=conn.cursor()
+    cursor.execute('SELECT * FROM users')
+    results=cursor.fetchall()
+#连接自动关闭
+```
+线程锁
+```
+import threading
+lock=threading.Lock()
+with lock:
+    #临界区代码
+    print('这段代码是线程安全的')
+```
+临时修改系统状态
+```
+import decimal
+with decimal.localcontext() as ctx:
+    ctx.prec=42 #临时设置高精度
+    #执行高精度计算
+#精度恢复原设置
+```
+### 创建自定义的上下文管理器
+类实现方式  
+可以通过__enter__和__exit__方法创建自定义的上下文管理器  
+```
+class Timer:
+    def __enter__(self):
+        import time
+        self.start=time.time()
+        return self
+    def __exit__(self,exc_type,exc_val,exc_tb):
+        import time
+        self.end=time.time()
+        print(f"耗时：{self.end-self.start:.2f}秒")
+        return False
+#使用示例
+with Timer() as t:
+    #执行一些耗时操作
+    sum(range(1000000)) #sum()是什么？
+```
+使用contextlib模块  
+python的contextlib模块提供了更简单的方式来创建上下文管理器
+```
+from contextlib import contextmanager
+
+@contextmanager
+def tag(name):
+    print(f"<{name}>")
+    yield
+    print(f"/<{name}>")
+#使用示例 这个示例是干嘛的？
+with tag("h1"):
+    print("这是一个标题")
+```
+### 常见问题与最佳实践
+常见错误  
+错误的认为with只能用于文件  
+```
+conn=sqlite3.connect('db.sqlite')
+#应该使用with语句
+```
+忽略__exit__的返回值
+```
+class MyContext:
+    def __exit__(self,exc_type,ext_val,exc_tb):
+        #忘记返回True/False可能导致异常处理不符合预期
+        pass
+```
+最佳实践  
+优先使用with管理资源：对于文件 网络连接 锁等资源 总是优先考虑使用with语句  
+保持上下文简洁 with块中的代码应该只包含与资源相关的操作  
+合理处理异常 在自定义上下文管理器中，根据需求决定是否抑制异常  
+利用多个上下文  python允许在单个with语句中管理多个资源
+
+### 总结要点
+自动管理资源 with语句确保资源被正确释放  
+上下文协议  需要实现__enter__和__exit__方法  
+异常安全  即使代码块中出现异常，资源也会被释放  
+常见应用 文件操作 数据库连接 线程锁等  
+自定义实现 可以通过类或contextlib创建自定义上下文管理  
