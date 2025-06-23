@@ -1033,3 +1033,255 @@ def f(a,b,/,c,d,*,e,f):
 形参a和b必须使用指定位置参数
 c或d可以是位置形参或关键字形参
 而e和f要求为关键字形参
+### python lambda 匿名函数
+可以具有任意数量的参数 但只能有一个表达式  
+通常在需要函数作为参数传递的情况下使用
+例如在 map() filter() reduce() 等函数中  
+语法格式
+```
+lambda arguments:expression
+```
+lambda是python的关键字 用于定义lambda函数  
+arguments是参数列表 可以包含零个或多个参数 但必须在冒号前指定  
+expression是一个表达式 用于计算并返回函数的结果  
+```
+f=lambda:"Hello,world!"
+print(f())
+```
+```
+x=lambda a:a+10
+print(x(5))
+```
+```
+x=lambda a,b:a*b
+print(x(5,6))
+```
+```
+x=lambda a,b,c:a+b+c
+print(x(5,6,2))
+```
+```
+numbers=[1,2,3,4,5]
+squared=list(map(lambda x:x**2,numbers))
+print(squared)
+```
+```
+numbers=[1,2,3,4,5,6,7,8]
+even_numbers=list(filter(lambda x:x%2==0,numbers))
+print(even_numbers)
+```
+```
+form functools import reduce
+numbers=[1,2,3,4,5]
+product=reduce(lambda x,y:x*y,numbers)
+print(product)
+```
+上面的实例中，reduce()函数通过遍历numbers列表，并使用lambda函数将积累的结果不断更新
+最终得到了1*2*3*4*5=120的结果  
+## python装饰器
+允许动态地修改函数或类的行为  
+装饰器是一种函数，它接受一个函数作为出参数 返回一个新的函数或修改原来的函数  
+装饰器的语法使用@decorator_name来应用在函数或方法上  
+python提供了一些内置的装饰器 如 @staticmethod @classmethod
+用于定义静态方法和类方法  
+装饰器的应用场景  
+日志记录：记录函数的调用信息 参数和返回值  
+性能分析：测量函数的执行时间  
+权限控制：限制对某些函数的访问权限  
+缓存：实现函数结果的缓存 以提高性能  
+### 基本语法
+```
+def decorator_function(original_function):
+    def wrapper(*args,**kwargs):
+        #在调用原始函数前添加的新功能
+        before_call_code()
+        
+        result=original_function(*args,**kwargs)
+        
+        #调用原始函数后添加的新功能
+        after_call_code()
+        
+        return result
+    return wrapper
+
+#使用装饰器
+@decorator_function
+def target_function(arg1,arg2):
+    pass #原始函数的实现
+```
+使用@decorator_function前缀在target_funciton定义前，
+python会自动将target_funciton作为参数传递给decorator_function
+然后将返回的wrapper函数替换掉原来的target_funciton  
+### 使用装饰器
+```
+@time_logger
+def target_function():
+    pass
+```
+等同于
+```
+def target_function():
+    pass
+target_function=time_logger(target_funciton)
+```
+通过装饰器 开发者可以在保持代码整洁的同时 灵活且高效地扩展程序的功能
+```
+def my_decorator(func):
+    def wrapper():
+        print("在原函数之前执行")
+        func()
+        print("在原函数之后执行")
+    return wrapper
+
+@my_decorator
+def say_hello():
+    print("Hello!")
+
+say_hello()
+```
+### 带参数的装饰器
+如果原函数需要参数 可以在装饰器的wrapper函数中传递参数
+```
+def my_decorator(func):
+    def wrapper(*args,**kwargs):
+        print("1")
+        func(*args,**kwargs)
+        print("2")
+    return wrapper
+
+@my_decorator
+def greet(name):
+    print(f"Hello,{name}!") #f-string,变量被求值输出
+
+greet("Alice")
+```
+装饰器本身也可以接受参数 此时需要额外定义一个外层函数
+```
+def repeat(num_times):
+    def decorator(func):
+        def wrapper(*args,**kwargs):
+            for _ in range(num_times):
+                func(*args,**kwargs)
+        return wrapper
+    return decorator
+
+@repeat(3)
+def say_hello():
+    print("Hello!")
+
+say_hello()
+```
+### 类装饰器
+类装饰器 class decorator是一种用于动态修改类行为的装饰器  
+它接收一个类作为参数 并返回一个新的类或修改后的类  
+类装饰器可以用于  
+添加/修改类的方法或属性  
+拦截实例化过程  
+实现单例模式 日志记录 权限检查等功能  
+类装饰器有两种常见形式：  
+函数形式的类装饰器 接收类作为参数 返回新类  
+类形式的类装饰器 实现__call__方法 使其可调用  
+#### 函数形式的类装饰器
+```
+#以下实例给类添加日志功能
+def log_class(cls):
+    """类装饰器，在调用方法前后打印日志"""
+    class Wrapper:
+        def __init__(self,*args,**kwargs):
+            self.warpped=cls(*args,**kwargs) #实例化原始类
+        
+        def __getattr__(self,name):
+            """拦截未定义的属性访问，转发给原始类"""
+            return getattr(self.wrapped,name) #看不懂
+        
+        def display(self):
+            print(f"调用{cls.__name__}.display()前")
+            self.wrapped.display()
+            print(f"调用{cls.__name__}.display()后")
+    
+    return Wrapper #返回包装后的类
+
+@log_class
+class MyClass:
+    def display(self):
+        print("这是MyClass的display方法")
+
+obj=MyClass()
+obj.display()
+```
+#### 类形式的装饰器 实现__call__方法
+```
+#以下实例实现单例模式 singleton
+class SingletonDecorator:
+    """类装饰器，使目标变成单例模式"""
+    def __init__(self,cls):
+        self.cls=cls
+        self.instance=None
+    
+    def __claa__(self.*arg,**kwargs):
+        """拦截实例化过程，确保只创建一个实例"""
+        if self.instance is None:
+            self.instance=self.cls(*args,**kwargs)
+        return self.instance
+
+@SingletonDecorator
+class Database:
+    def __init__(self):
+        print("Database 初始化")
+
+db1=Database()
+db2=Database()
+print(db1 is db2)
+```
+#### 内置装饰器
+@staticmethod 将方法定义为静态方法 不需要实例化类即可调用  
+@classmethod 将方法定义为类方法 第一个参数是类本身 通常命名为cls  
+@property 将方法转换为属性 使其可以像属性一样访问  
+```
+class MyClass:
+    @staticmethod
+    def static_method():
+        print("This is a static method.")
+    
+    @classMethod
+    def class_method(cls):
+        print(f"This is a class method of {cls.__name__}.")
+    
+    @property
+    def name(self):
+        return self.name
+    
+    @name.setter  #这个是啥
+    def name(self,value):
+        self.name=value
+
+#使用
+MyClass.static_method()
+MyClass.class_method()
+
+obj=MyClass()
+obj.name="Alice"
+print(obj.name)
+```
+#### 多个装饰器的堆叠
+将多个装饰器堆叠在一起 会按照从下到上的顺序依次应用
+```
+def decorator1(func):
+    def wrapper():
+        print("Decorator 1")
+        func()
+    return wrapper
+
+def decorator2(func):
+    def wrapper():
+        print("Decorator 2")
+        func()
+    return wrapper
+
+@decorator1
+@decorator2
+def say_hello():
+    print("Hello!")
+
+say_hello() #装饰器从下到上依次应用，显示到打印结果上就是从外到里从上到下
+```
