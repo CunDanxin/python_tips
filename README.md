@@ -1285,3 +1285,136 @@ def say_hello():
 
 say_hello() #装饰器从下到上依次应用，显示到打印结果上就是从外到里从上到下
 ```
+## python3数据结构
+### 列表
+list.append(x) #把一个元素添加到列表的结尾  
+list.extend(L) #通过添加指定列表的所有元素来扩充列表  
+list.insert(i,x) #在指定位置插入一个元素  
+a.insert(len(a),x)相当于 a.append(x)  
+list.remove(x) #删除列表中值为x的第一个元素；如果没有这样的元素，返回一个错误  
+list.pop([i]) #从列表的指定位置移除元素，并将其返回
+如果没有指定索引 返回最后一个元素 元素随即从列表中被移除  
+括号表示这个参数可选，并非要求输入一对方括号；通过标记  
+list.clear() #移除列表中的所有项 等于 del a[:]  
+list.index(x) #返回列表中第一个值为x的元素的索引；如果没有 返回一个错误  
+list.count(x) #返回x在列表中出现的次数  
+list.sort() #对列表中的元素进行排序  
+list.reserve() #倒排列表中的元素  
+list.copy() #返回列表的浅复制，等于 a[:]  
+类似 insert remove sort 等修改列表的方法没有返回值  
+### 将列表当作栈使用
+栈后进先出 LIFO last-in-first_out  
+栈操作  
+压入 push 将一个元素添加到栈的顶端  
+弹出 pop 移除并返回栈顶元素  
+查看栈顶元素 peek/top 返回栈顶元素而不移除它  
+检查是否为空 IsEmpty 检查栈是否为空  
+获取栈的大小 Size 获取栈中元素的数量  
+### 将列表当作队列使用
+队列 queue 先进先出 FIFO first-in-first-out  
+使用列表时，如果频繁地在列表的开头插入或删除元素 性能会受到影响  
+collection.deque 双端队列，可以在两端高效地添加和删除元素  
+collection.deque是python标准库的一部分，非常适合用于实现队列  
+```
+from collections import deque
+#创建一个空队列
+queue=deque()
+
+#向队尾添加元素
+queue.append('a')
+queue.append('b')
+queue.append('c')
+
+print('队列状态',queue)
+
+#从队首移除元素
+first_element=queue.popleft()
+print('移除的元素',first_lelment)
+print('队列状态',queue)
+
+#产看队首元素（不移除）
+front_element=queue[0]
+
+#检查队列是否为空
+is_empty=len(queue)==0
+
+#获取队列大小
+size=len(queue)
+```
+collection.deque更高效和简洁
+它提供了O(1)时间复杂度的添加和删除操作 非常适合队列这种数据结构  
+### 列表推导式
+```
+[str(round(355/113,i)) for i in range(1,6)]
+```
+### 嵌套列表解析
+```
+matrix=[
+    [1,2,3,4],
+    [5,6,7,8],
+    [9,10,11,12]
+]
+a=[[row[i] for row in matrix] for i in range(4)}
+```
+### del语句
+使用del语句可以从一个列表中根据索引来删除一个元素 而不是值来删除元素  
+也可以用del删除实体变量  
+### 元组和序列
+元组由若干逗号分割的值组成  
+元组在输出时总是有括号的 以便于正确表达嵌套结构  
+在输入时可能有或没有括号  
+如果元组是更大的表达式的一部分，括号通常是必须的  
+### 集合
+集合是一个无序不重复元素的集
+基本功能包括关系测试和消除重复元素  
+可以用大括号创建集合
+空集合必须要用set()而不是{}  
+集合支持推导式
+```
+a={x for x in 'abracadabra' i x not in 'abc'}
+```
+### 字典
+序列是以连续的整数为索引 字典以关键字为索引  
+关键字可以是任意不可变类型 通常用字符串或数值  
+可以把它看作无序的 键=>值对集合
+在同一个字典内 关键字必须是互不相同的  
+一对大括号创建一个空的字典 {}  
+构造函数dict()直接从键值对元组列表中构建字典  
+字典推导式可以用来创建任意键和值的表达式词典  
+```
+{x:x**2 for x in (2,4,6)}
+```
+如果关键字只是简单的字符串 使用关键字参数指定键值对有时候更方便
+```
+dict(sape=1,guido=2,jack=3)
+```
+### 遍历技巧
+在字典中遍历时，关键字和对应的值可以使用items()方法同时解读出来
+```
+knights={'a':1,'b':2}
+for k,v in knights.items():
+    print(k,v)
+```
+在序列中遍历时，索引位置和对应值可以使用enumerate()函数同时得到
+```
+for i,v in enumerate(['tic','tac','toe'])
+    print(i,v)
+```
+同时遍历两个或更多的序列，可以使用zip()组合
+```
+questions=['q1','q2','q3']
+answers=['a1','a2','a3']
+for q,a in zip(questions,answers):
+    print('What is you {0}? It is {1}.'.format(q,a))
+```
+要反向遍历一个序列 首先指定这个序列，然后调用reversed()函数
+```
+for i in reversed(range(1,10,2)):
+    print(i)
+```
+要按顺序遍历一个序列，使用sorted()函数返回一个已排序的序列，并不修改原值
+```
+basket=['apple','orange','apple','pear','orange','banana']
+for f in sorted(set(basket)):
+    print(f)
+```
