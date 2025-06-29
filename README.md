@@ -1741,3 +1741,180 @@ pickle.dump(obj,file,[,protocol]) #protocol未说明
 ```
 x=pickle.load(file)
 ```
+## python3 file方法
+open()
+```
+open(file,mode='r')
+open(file,mode='r',buffering=-1,encoding=None,errors=None,
+    newline=None,closefd=True,opener=None)
+```
+file 必需 文件路径 相对或绝对路径  
+mode 可选 文件打开模式  
+mode参数有  
+```
+t 文本模式 默认  
+x 写模式  新建一个文件 文件已存在会报错  
+b 二进制模式  
++ 打开一个文件进行更新 可读可写  
+U 通用换行模式 pthon3不支持  
+r 只读打开 指针再文件头 默认模式  #怎么会有两个默认模式？
+rb
+r+
+rb+ 一般用于非文本文件如通图片等
+w 写入 删除原有内容
+wb
+w+
+wb+
+a 追加
+ab
+a+
+ab+
+
+```
+### file对象 
+file对象使用open函数来创建  常用函数有
+```
+file.close()
+file.flush() 刷新文件内部缓冲 直接把内部缓冲区的数据立刻写入文件
+file.fileon() 返回一个整型的文件描述符 可以用在如os模块的read方法等一些底层操作上
+file.isatty() 文件是否连接到一个终端设备 返回布尔值
+file.next() python3中的file对象不支持next方法 返回文件下一行
+file.read([size]) 从文件读取指定的字节数 未给定或负则读取所有
+file.readline([size]) 读取整行 包括'\n'等字符
+file.readlines([sizeint]) 读取所有行并返回列表 
+若给定sizeint>0 返回总和大约为sizeint字节的行 实际读取值可能比sizeint较大
+因为需要填充缓冲区
+file.seek(offset[,whence]) 移动文件读取指针到指定位置
+file.tell() 返回文件当前位置
+file.truncate([size]) 从文件的首行首字符开始截断 截断文件为size个字符
+无size表示从当前位置截断；截断之后后面的所有字符被删除 其中windows系统下的换行
+代表2个字符大小
+file.write(str) 将字符串写入文件 返回的是写入的字符长度
+file.writelines(sequecne) 向文件写入一个序列字符串列表
+如果需要换行则要自己加入每行的换行符
+```
+## python3 OS文件/目录方法
+通过os模块 可以执行文件操作 目录操作 环境变量管理 进程管理等任务  
+os模块是跨平台的 使用之前先导入  
+```
+import os
+```
+### os模块的常用功能
+获取当前工作目录  
+os.getcwd() 当前工作目录是python脚本执行时所在的目录  
+改变当前工作目录  
+os.chdir(path) path是想要切换到的目录路径  
+列出目录内容  
+os.listdir(path) 列出指定目录中的所有文件和子目录
+如果不提供path参数 默认列出当前工作目录的内容  
+创建目录  
+os.mkdir("new_directory")  
+删除目录  
+os.rmdir(path)  
+删除文件  
+os.remove(path)  
+重命名文件或目录  
+os.rename(src,dst)  
+获取环境变量  
+os.getenv(key)  
+执行系统命令  
+os.system(command) 在操作系统的shell中执行命令 执行后 返回命令的退出状态  
+### OS常用方法
+```
+os.access(path,mode) 检验权限模式  
+os.chdir(path)  
+os.chflags(path,flags) 设置路径的标记为数字标记  
+os.chmod(path,mode)  更改权限  
+os.chown(path,uid,gid) 更改文件所有者  
+os.chroot(path)  改变当前进程的根目录  
+os.close(fd)  关闭文件描述符fd  
+os.closerange(fd_low,fd_high) 关闭所有文件描述符  
+os.dup(fd) 复制文件描述符fd  
+os.dup2(fd,fd2) 将一个文件描述符fd复制到另一个fd2  
+os.fchdir(fd) 通过文件描述符改变当前工作目录  
+os.fchmod(fd,mode)  
+os.fchown(fd,uid,gid)  
+os.fdatasync(fd)  强制将文件写入磁盘 但不强制更新文件的状态信息  
+os.fdopen(fd[,mode[,bufsize]])  
+os.fpathconf(fd,name) 返回一个打开的文件的系统配置信息  
+os.fstat(fd)  返回文件描述符fd的状态 像stat()  
+os.fstatvfs(fd) 返回包含文件描述符fd的文件的文件系统信息  
+os.fsync(fd)  强制将文件描述符为fd的文件写入硬盘  
+os.ftruncate(fd,length) 裁剪文件描述符fd对应的文件  
+os.getcwd()  
+os.getrcwdb()  返回一个当前工作目录的unicode对象  
+os.isatty(fd)  
+os.lchflags(path,flags) 设置路径的标记为数字标记 但是没有软连接  
+os.lchmode(path,mode)  
+os.lchown(path,uid,gid)  
+os.link(src,dst)  创建硬链接
+os.listdir(path)  
+os.lseek(fd,pos,how)  
+os.lstat(path)  
+os.major(device) 从原始的设备号中提取设备major号码  
+os.makedev(major,minor) 以major和minor组成一个原始设备号  
+os.makedirs(path[,mode]) 递归文件夹创建 需要包含子文件夹  
+os.minor(device) 提取设备minor号码  
+os.mkdir(path[,mode]) 默认mode 0777  
+os.mkfifo(path[,mode]) 创建命名管道 mode为数字 默认为 0666  
+os.mknod(filename[,mode=0600,device]) 创建文件系统节点  
+os.open(file,flags[,mode])  
+os.openty() 打开一个新的伪终端对 返回pty和tty的文件描述符  
+os.pathconf(path,name)  
+os.pipe()  
+os.popen(command[,mode[,bufsize]])  
+os.read(fd,n)  
+os.readlink(path)  
+os.remove(path)  
+os.removedirs(path)  
+os.rename(src,dst)  
+os.rmdir(path)  
+os.stat(path)  
+os.stat_float_times([newvalue])  
+os.statvfs(path)  
+os.symlink(src,dst)  
+os.tcgetpgrp(fd)  
+os.tcsetpgrp(fd,pg)  
+os.tempnam([dir[,prefix]])  
+os.tmpfile()  
+os.tmpnam()  
+os.ttyname(fd)  
+os.unlink(path)  
+os.utime(path,times)  
+os.walk(top[,topdown=True[,onerror=None[,followlinks=False]]])  
+os.write(fd,str)  
+
+os.path模块
+路径操作
+os.path.abspath(path)  
+os.path.basename(path)  
+os.path.dirname(path)  
+os.path.join(*paths)  
+os.path.split(path)  
+os.path.splitext(path)  
+路径信息获取  
+os.path.exists(path)  
+os.path.isfile(path)  
+os.path.isdir(path)  
+os.path.getsize(path)  
+os.path.getatime(path)  
+os.path.getmtime(path)
+os.path.getctime(path)
+路径规范化
+os.path.normpath(path) 消除冗余的分隔符和相对路径标记
+os.path.realpath(path) 获取真实路径，解析符号链接
+os.path.relpath(path.start=os.crudir) 计算相对路径
+路径比较
+os.path.commonpath(paths) 返回共同路径
+os.path.commonprefix(list) 返回最长公共前缀
+os.path.samefile(path1,path2)
+os.path.sameopenfile(fp1,fp2)
+os.path.samestart(stat1,stat2)
+平台依赖功能
+os.path.splitdrive(path)
+os.path.splitunc(path)
+
+os.pardir() 获取当前目录的父目录 字符串形式显示
+os.replace()
+os.startfile() 在windows上打开一个文件或文件夹
+```
