@@ -1918,3 +1918,255 @@ os.pardir() 获取当前目录的父目录 字符串形式显示
 os.replace()
 os.startfile() 在windows上打开一个文件或文件夹
 ```
+## python3错误和异常 
+两种错误：语法错误和异常  
+python assert 断言 用于判断一个表达式 在表达式条件为false的时候触发异常  
+### 语法错误
+或者称为解析错误
+### 异常
+即便python程序的语法是正确的 运行时也可能发生错误  
+运行期间检测到的错误被称为异常  
+大多数异常不会被程序处理 以错误信息的形式呈现  
+异常以不同的类型出现 这些类型都作为信息的一部分打印出来  
+错误信息的前面部分显示了异常发生的上下文 并以调用栈的形式显示具体信息  
+### 异常处理
+#### try/except
+异常捕捉可以使用语句
+```
+try:
+    #执行代码
+except:
+    #发生异常时执行的代码
+```
+如果在执行try子句的过程中发生了异常 那么try子句余下的部分将被忽略
+如果异常的类型和except之后的名称相符 那么对应的except子句将被执行  
+如果一个异常没有与任何的except匹配 那么这个异常将会传递给上层的try中  
+一个try语句可能包含多个except子句 分别来处理不同的特定的异常
+最多只有一个分支被执行  
+处理程序将只针对对应的try子句中的异常进行处理 而不是其他的try的处理程序中的异常  
+一个except子句可以同时处理多个异常 这些异常将被放在一个括号里成为一个元组
+```
+except (RuntimeError,TypeError,NameError):
+    pass
+```
+最后一个except子句可以忽略异常的名称 它将被当作通配符使用
+可以使用这种方法打印一个错误信息 然后再次把异常抛出  
+#### try/except...else
+可选的else子句 如果使用这个子句 必须放在所有的except子句之后  
+else子句将在try子句没有发生任何异常的时候执行  
+使用else子句比把所有语句都放在try子句里面要好
+这样可以避免一些意想不到 而except又无法捕获的异常  
+异常处理并不仅仅处理直接发生在try子句中的异常 还能处理子句调用的函数里抛出的异常
+#### try-finally语句
+不管是否发生异常都会执行的代码
+```
+try:
+    #执行代码
+except:
+    #发生异常时执行的代码
+else:
+    #没有异常时执行的代码
+finally:
+    #不管有没有异常都会执行的代码
+```
+### 抛出异常
+python使用 raise语句抛出一个指定的异常
+```
+raise [Exception[,args[,traceback]]]
+```
+raise唯一的一个参数指定了要被抛出的异常 必须时一个异常的实例或者是异常的类  
+只想知道是否抛出了一个异常并不想处理 一个简单的raise语句就可以再次把它抛出
+```
+try:
+    raise NameError('HiThere')
+except NameError:
+    print('An exception flow by!')
+    raise
+```
+### 用户自定义异常
+通过创建一个新的异常类来拥有自己的异常
+异常类继承自Exception类 可以直接继承 或者间接继承  
+当创建一个模块有可能抛出多种不同的异常时 通常的做法是为这个包创建一个
+基础异常类 基于这个基础类为不同的错误情况创建不同的子类  
+大多数的异常的名字都以Error结尾 就跟标准的异常命名一样  
+### 定义清理行为
+即finally子句  
+如果一个异常在try/except/else子句里被抛出 而又没有任何的except把它截住
+那么这个异常会在finally子句执行后被抛出  
+### 与定义的清理行为
+with语句 无论系统是否成功的使用了它 一旦不需要了 标准清理行为就会执行  
+## python3面向对象
+### 面向对象技术简介
+类class 用来描述具有相同的属性和方法的对象的集合
+定义了该集合中每个对象所共有的属性和方法 对象是类的实例  
+方法 类中定义的函数  
+类变量 在整个实例化的对象中是公用的 定义在类中且在函数体之外
+类变量通常不作为实例变量使用  
+数据成员 类变量或者实例变量用于处理类及其实例对象的相关的数据  
+方法重写 从父类继承的方法不能满足子类需求时 可以进行改写 这个过程叫方法的覆盖 override
+也称为方法的重写  
+局部变量 定义在方法中的变量 只作用于当前实例的类  
+实例变量 类的声明中 属性是用变量来表示的 这种变量即实例变量
+实例变量就是一个用self修饰的变量  
+继承 即一个派生类 derived class 继承基类 base class 的字段和方法
+继承也允许把一个派生类的对象作为一个基类对象对待  
+实例化 创建一个类的实例 类的具体对象  
+对象 通过类定义的数据结构实例 对象包括两个数据成员 类变量 实例变量 和方法  
+python中的类提供了面向对象编程的所有基本功能：类的继承机制允许多个基类
+派生类可以覆盖基类中的任何方法 方法中可以调用基类中的同名方法  
+对象可以包含任意数量和类型的数据  
+### 类定义
+```
+class ClassName:
+    <statement-1>
+    .
+    .
+    .
+    <statement-N>
+```
+类实例化后 可以使用其属性 实际上 创建一个类后可以通过类名访问其属性
+### 类对象
+类对象支持两种操作 属性引用和实例化  
+属性引用标准语法 obj.name
+类对象创建后 类命名空间中所有的命名都是有效属性名  
+类有一个名为__init__()的特殊方法 构造方法
+该方法在类实例化时会自动调用  
+__init__()方法可以有参数 参数通过__init__()传递到类的实例化操作上  
+### self代表类的实例，而非类
+类的方法与普通的函数只有一个特别的区别
+他们必须有一个额外的第一个参数名称 按照惯例名称是self  
+self代表的是类的实例 代表当前对象的地址 而self.class则指向类  
+self不是python的关键字 换成任意其他字符串都可以正常执行  
+在python中 self是一个惯用的名称 用于表示类的实例自身 他是一个指向实例的引用
+使得类的方法能够访问和操作实例的属性  
+当定义一个类 并在类中定义方法时 第一个参数通常被命名为self  
+可以使用其他名称但强烈建议使用self 保持代码的一致性和可读性  
+通过self 可以在类的方法中访问和操作实例的属性 从而实现类的行为  
+### 类的方法
+在类的内部 使用def关键字来定义一个方法
+类方法必须包含参数self 且为第一个参数 self代表的是类的实例  
+```
+class people:
+    name=''
+    age=0
+    #定义私有属性 私有属性在类外部无法直接进行访问
+    __weight=0
+    def __init__(self,n,a,w):
+        self.name=n
+        self.age=a
+        self.__wight=w
+    def speak(self):
+        print("%s say: I'm #d years old."%(self.name,self.age))
+
+p=people('runoob',10,30)
+p.speak()
+```
+### 继承
+派生类的定义如下
+```
+class DerivedClassName(BaseClassName):
+    <statement-1>
+    .
+    .
+    .
+    <statement-N>
+```
+子类派生类 DerivedClassName 会继承父类基类 BaseClassName 的属性和方法  
+BaseClassName必须与派生类定义在一个作用域内  
+除了类 还可以用表达式 基类定义在另一个模块中是这一点非常有用  
+```
+class DerivedClassName(modname.BaseClassName):
+```
+```
+class people:
+    name=''
+    age=0
+    #定义私有属性 私有属性在类外部无法直接进行访问
+    __weight=0
+    def __init__(self,n,a,w):
+        self.name=n
+        self.age=a
+        self.__wight=w
+    def speak(self):
+        print("%s say: I'm #d years old."%(self.name,self.age))
+
+#单继承示例
+class student(people):
+    grade=''
+    def __init__(self,n,a,w,g):
+        #调用父类的构造函数
+        people.__init__(self,n,a,w)
+        self.grade=g
+    #覆写父类的方法
+    def spead(self):
+    print("%s say:I'm %d year old, I'm in grade %d"
+    %(self.name,self.age,self.grade))
+    
+s=student('ken',10,60,3)
+s.speak()
+```
+### 多继承
+python有限的支持多继承形式
+```
+class DerivedClassName(Base1,Base2,Base3):
+    <statement-1>
+    .
+    .
+    .
+    <statement-N>
+```
+注意圆括号中父类的顺序 若是父类中有相同的方法名 而在子类使用时未指定
+python从左至右搜索 即方法在子类中未找到时 从左到右查找父类中是否包含方法  
+### 方法重写
+```
+class Parent:
+    def myMethod(self):
+    print('调用父类方法')
+
+class Child(Parent):
+    def myMethod(self):
+    print('调用子类方法')
+
+c=Child() #子类实例
+c.myMethod() #子类调用重写方法
+super(Child,c).myMethod() #用子类对象调用父类已被覆盖的方法
+```
+### 类的属性和方法
+#### 类的私有属性
+__private_attrs 两个下划线开头 声明该属性为私有
+不能在类的外部被使用或访问 在类内部的方法中使用时 self.__private_attrs
+#### 类的方法
+#### 类的私有方法
+__private_method 只能在类的内部调用 不能在外部调用
+#### 类的专有方法
+__init__ 构造函数 生成对象时使用
+__del__ 析构函数 释放对象时使用
+__repr__ 打印 转换
+__setitem__ 按照索引赋值
+__getitem__ 按照索引获取值
+__len__ 获得长度
+__cmp__ 比较运算
+__call__ 函数调用
+__add__ 加
+__sub__ 减
+__mul__ 乘
+__truediv__ 除
+__mod__ 求余
+__pow__ 乘方
+#### 运算符重载
+可以对类的专有方法进行重载
+```
+class Vector:
+    def __init__(self,a,b):
+        self.a=a
+        self.b=b
+    def __str__(self):
+        return 'Vector(%d,%d)'%(self.a,self.b)
+    def __add__(self,other):
+        return Vector(self.a+other.a,self.b+other.b)
+
+v1=Vector(2.10)
+v2=Vector(5,-2)
+print(v1+v2)
+#不理解
+```
